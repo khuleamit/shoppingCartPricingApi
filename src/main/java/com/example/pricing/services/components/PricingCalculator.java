@@ -114,7 +114,7 @@ public class PricingCalculator {
 
             return buyingProductPrice
                     .multiply(BigDecimal.valueOf(discountEligibleQuantity))
-                    .divide(BigDecimal.valueOf(2), RoundingMode.DOWN);
+                    .divide(BigDecimal.valueOf(2.0));
 
         } else if (eligiblePromotion.equals(Constants.PROMOTION_B3G1FREE)) {
 
