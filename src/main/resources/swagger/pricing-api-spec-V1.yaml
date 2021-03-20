@@ -1,0 +1,140 @@
+---
+swagger: "2.0"
+info:
+  description: Pricing API - This specification can be used to auto generate API components
+  version: V1
+  title: Shopping Cart Pricing API
+  contact:
+    email: khuleamit@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: virtserver.swaggerhub.com
+basePath: /pricing/V1
+tags:
+  - name: Pricing
+    description: Calculates total cost of an order
+schemes:
+  - https
+paths:
+  /pricing:
+    post:
+      tags:
+        - pricing
+      summary: calculates total cost of an order
+      description: calculates total cost of an order
+      operationId: pricing
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: request
+          description: Inventory item to add
+          required: false
+          schema:
+            $ref: '#/definitions/Request'
+      responses:
+        "200":
+          description: successful
+          schema:
+            $ref: '#/definitions/Response'
+        "201":
+          description: item created
+        "400":
+          description: invalid input, object invalid
+        "409":
+          description: an existing item already exists
+definitions:
+  Request:
+    type: object
+    required:
+      - correlationId
+      - order
+    properties:
+      correlationId:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      order:
+        $ref: '#/definitions/Order'
+      promotions:
+        $ref: '#/definitions/Promotions'
+  Response:
+    type: object
+    properties:
+      apiStatus:
+        type: string
+      apiMessage:
+        type: string
+      correlationId:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      order:
+        $ref: '#/definitions/Order'
+      orderPrice:
+        type: number
+        example: 20.0
+      appliedPromotion:
+        type: string
+        example: buyThreeGetFourthFree
+  Order:
+    required:
+      - id
+      - items
+    properties:
+      id:
+        type: string
+        example: OrderId_1
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+  Item:
+    required:
+      - id
+      - quantity
+    properties:
+      id:
+        type: string
+        example: ItemId_1
+      product:
+        $ref: '#/definitions/Product'
+      quantity:
+        type: integer
+        example: 2
+      itemPrice:
+        type: number
+        example: 20.0
+  Product:
+    required:
+      - id
+      - price
+    properties:
+      id:
+        type: string
+        example: Product_A
+      price:
+        type: number
+        example: 10.0
+  Promotions:
+    properties:
+      buyOneGet50OffSecond:
+        type: array
+        example:
+          - Product_A
+          - Product_B
+        items:
+          type: string
+      buyThreeGetOneFree:
+        type: array
+        example:
+          - Product_A
+          - Product_B
+          - Product_C
+          - Product_D
+          - Product_F
+        items:
+          type: string
